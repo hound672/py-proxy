@@ -8,8 +8,8 @@ logger = logging.getLogger(__name__)
 class HttpHeader(UserDict):
     """Implements workflow with Http header"""
 
-    def __init__(self, headers_list: list, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+    def __init__(self, headers_list: list) -> None:
+        super().__init__()
         if headers_list:
             # headers_list is not empty so it contains full header
             self['main'] = headers_list.pop(0)
@@ -17,7 +17,7 @@ class HttpHeader(UserDict):
             key, value = header.split(':', maxsplit=1)
             self[key] = value
 
-    def __bytes__(self):
+    def __bytes__(self) -> bytes:
         lines = []
         for key, value in self.items():
             if key == 'main':
@@ -28,7 +28,7 @@ class HttpHeader(UserDict):
         return '\r\n'.join(lines).encode('utf8')
 
     @classmethod
-    def read_from_buffer(cls, buffer: BufferedReader):
+    def read_from_buffer(cls, buffer: BufferedReader) -> 'HttpHeader':
         """
         Read Http header from BufferedRead.
         And create HttpHeader instance

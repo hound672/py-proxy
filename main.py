@@ -36,23 +36,5 @@ def main() -> None:
         server.server_close()
 
 
-class CntMan:
-    def __init__(self, val):
-        self._val = val
-    def __enter__(self):
-        print('enter...')
-        return self._val
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        print('exit')
-
-def get_some():
-    return CntMan(123)
-
-def test():
-    print('test')
-    with get_some() as val:
-        print(f'Val: {val}')
-
 if __name__ == '__main__':
     main()
-    # test()

@@ -9,10 +9,11 @@ logger = logging.getLogger(__name__)
 
 class ProxyHandler(StreamRequestHandler):
     def handle(self) -> None:
-        incoming_header = HttpHeader.read_from_buffer(self.rfile)
-        if not incoming_header:
+        header = HttpHeader.read_from_buffer(self.rfile)
+        if not header:
             return
 
-        logging.info(f'Request: {incoming_header["main"]}')
-        request = Request(incoming_header)
-        request.send_request()
+        logging.info(f'Request: {header["main"]}')
+        request = Request(header)
+        data = request.send_request()
+        self.wfile.write(data)
