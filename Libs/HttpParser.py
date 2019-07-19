@@ -1,6 +1,7 @@
 import logging
 from enum import Enum
 from io import BufferedReader
+from typing import BinaryIO
 from collections import UserDict
 from copy import copy
 
@@ -38,7 +39,7 @@ class HttpHeader(UserDict):
         return '\r\n'.join(lines).encode('utf8')
 
     @classmethod
-    def read_from_buffer(cls, buffer: BufferedReader) -> 'HttpHeader':
+    def read_from_buffer(cls, buffer: BinaryIO) -> 'HttpHeader':
         """
         Read Http header from BufferedRead.
         And create HttpHeader instance
@@ -67,6 +68,6 @@ class BaseStream:
         return self._header
 
     @property
-    def path(self):
+    def path(self) -> str:
         """Return path from header"""
         return self._header['main']
