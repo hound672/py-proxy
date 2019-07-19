@@ -1,9 +1,19 @@
 import logging
+from enum import Enum
 from io import BufferedReader
 from collections import UserDict
+from copy import copy
 
 logger = logging.getLogger(__name__)
 
+
+class HttpCodes(Enum):
+    SUCCESS = 200
+    MOVED_PERMANENTLY = 301
+    FOUND = 302
+
+
+########################################################
 
 class HttpHeader(UserDict):
     """Implements workflow with Http header"""
@@ -12,10 +22,10 @@ class HttpHeader(UserDict):
         super().__init__()
         if headers_list:
             # headers_list is not empty so it contains full header
-            self['main'] = headers_list.pop(0)
+            self['main'] = headers_list.pop(0).strip()
         for header in headers_list:
             key, value = header.split(':', maxsplit=1)
-            self[key] = value
+            self[key] = value.strip()
 
     def __bytes__(self) -> bytes:
         lines = []
@@ -38,6 +48,25 @@ class HttpHeader(UserDict):
             data = buffer.readline()
             if not data or data == b'\r\n':
                 break
-            headers_list.append(data.decode('utf8').strip())
+            headers_list.append(data.decode('utf8'))
 
         return cls(headers_list)
+
+
+########################################################
+
+
+class BaseStream:
+    _header: HttpHeader
+
+    def __init__(self, header: HttpHeader) -> None:
+        self._header = copy(header)
+
+    @property
+    def header(self) -> 'HttpHeader':
+        return self._header
+
+    @property
+    def path(self):
+        """Return path from header"""
+        return self._header['main']
