@@ -2,6 +2,7 @@ import logging
 import argparse
 from socketserver import TCPServer
 
+from settings import settings
 from Libs.ProxyHandler import ProxyHandler
 
 logger = logging.getLogger(__name__)
@@ -10,25 +11,30 @@ logger = logging.getLogger(__name__)
 def parse_args() -> argparse.Namespace:
     """Init args params"""
     parser = argparse.ArgumentParser()
-    parser.add_argument('--log-level', default='INFO',
+    parser.add_argument('--log-level', default=settings.log_level,
                         help='Log level: DEBUG, INFO (by default), WARNING, ERROR, CRITICAL')
-    parser.add_argument('--host', default='localhost',
+    parser.add_argument('--host', default=settings.host,
                         help='Host name for listening')
-    parser.add_argument('--port', default=9001,
+    parser.add_argument('--port', default=9001, type=int,
                         help='TCP port for listening')
-    return parser.parse_args()
+    args = parser.parse_args()
+    settings.log_level = args.log_level
+    settings.host = args.host
+    settings.port = args.port
+    return args
 
 
 def main() -> None:
     args = parse_args()
+    print(f'Settings: {settings}')
 
     log_level = getattr(logging, args.log_level, logging.INFO)
     logging.basicConfig(level=log_level,
                         format='[%(asctime)s]-[%(levelname)s:%(name)s]-[%(filename)s:%(lineno)d]: %(message)s')
 
-    logger.info(f'Start server: {args.host}:{args.port}')
+    logger.info(f'Start server: {settings.host}:{settings.port}')
 
-    server = TCPServer((args.host, args.port), ProxyHandler)
+    server = TCPServer((settings.host, settings.port), ProxyHandler)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

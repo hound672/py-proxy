@@ -16,4 +16,4 @@ class ProxyHandler(StreamRequestHandler):
         logging.info(f'Request: {header["main"]}')
         request = Request(header)
         data = request.send_request()
-        self.wfile.write(data)
+        # self.wfile.write(data)

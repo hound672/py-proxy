@@ -3,13 +3,12 @@ import ssl
 from copy import copy
 from io import BufferedReader
 from contextlib import AbstractContextManager
-from typing import Optional
 
 from Libs.HttpParser import HttpHeader
 
 
 class SocketContextManager(AbstractContextManager):
-    """Context manager for reaf from socket"""
+    """Context manager for read from socket"""
 
     def __enter__(self) -> BufferedReader:
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -46,4 +45,4 @@ class Request:
             file.flush()
             header = HttpHeader.read_from_buffer(file)
 
-            return bytes(header)  # TODO TEMP
+            # return bytes(header)  # TODO TEMP
