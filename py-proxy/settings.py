@@ -9,9 +9,9 @@ class Settings:
     log_level: str = 'INFO'
     host: str = 'localhost'
     port: int = 9001
-    # target_url: str = 'https://habr.com'
+    target_url: str = 'https://habr.com'
     # target_url: str = 'https://www.f1-world.ru'
-    target_url: str = 'https://stackoverflow.com'
+    # target_url: str = 'https://stackoverflow.com'
 
     @property
     def local_url(self) -> str:

@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "py-proxy"
+version = "0.0.1"
+description = ""
+authors = ["Vasilii Bliznetcov <hound672@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+mypy = "0.670"
+
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
