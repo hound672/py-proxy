@@ -9,7 +9,7 @@ Main application class
 
 import asyncio
 
-from py_proxy.http_protocol import HttpProtocol
+from py_proxy.http_proxy import HttpProxy
 
 
 class Application:
@@ -29,8 +29,8 @@ class Application:
         return await self._create_server(host='localhost', port=8888)
 
     @staticmethod
-    def _protocol_factory():
-        return HttpProtocol()
+    def _protocol_factory() -> asyncio.Protocol:
+        return HttpProxy()
 
     @classmethod
     async def _create_server(cls, host: str, port: int) -> asyncio.AbstractServer:

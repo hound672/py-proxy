@@ -9,7 +9,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class HttpProtocol(Protocol):
+class HttpProxy(Protocol):
     """Class for processing TCP connections."""
 
     _transport: Transport
@@ -21,4 +21,5 @@ class HttpProtocol(Protocol):
     def data_received(self, data_received: bytes) -> None:
         """Called when data is received."""
         logger.warning('Got data: {}'.format(data_received))
-        self._transport.write(data_received)
+        # self._transport.write(data_received)
+        self._transport.write(b'hello')
