@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-
-Brief description.
-
-Some other description
-"""
+"""Test application."""
 
 from unittest.mock import AsyncMock, patch, create_autospec
 
@@ -63,16 +58,19 @@ def test_protocol_factory(mock_server_protocol, app):
 
 @pytest.mark.asyncio
 @patch('asyncio.get_event_loop')
-async def test_create_server(mock_get_event_loop, app, get_server_address):
+async def test_create_server(mock_get_event_loop, get_server_address):
     """Check if server starts with correct params."""
     mock_loop = AsyncMock()
     mock_get_event_loop.return_value = mock_loop
 
-    await app._create_server(get_server_address.host, get_server_address.port)
+    host, port = get_server_address
+
+    server = await Application._create_server(host=host, port=port)
 
     mock_get_event_loop.assert_called_with()
     mock_loop.create_server.assert_awaited_with(
-        app._protocol_factory,
-        host=get_server_address.host,
-        port=get_server_address.port,
+        Application._protocol_factory,
+        host=host,
+        port=port,
     )
+    assert server == mock_loop.create_server.return_value

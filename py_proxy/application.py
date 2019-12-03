@@ -26,12 +26,12 @@ class Application:
 
     async def _init(self) -> asyncio.AbstractServer:
         """Init app."""
-        return await self._create_server('', '')
 
     @staticmethod
     def _protocol_factory():
         return ServerProtocol()
 
-    async def _create_server(self, host, port) -> asyncio.AbstractServer:
+    @classmethod
+    async def _create_server(cls, host: str, port: int) -> asyncio.AbstractServer:
         loop = asyncio.get_event_loop()
-        return await loop.create_server(self._protocol_factory, host=host, port=port)
+        return await loop.create_server(cls._protocol_factory, host=host, port=port)

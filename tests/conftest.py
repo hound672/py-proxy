@@ -6,6 +6,7 @@ import socket
 from typing import NamedTuple
 
 import pytest
+from faker import Factory
 
 
 class ServerAddress(NamedTuple):
@@ -24,3 +25,9 @@ def get_server_address():
     host = 'localhost'
 
     return ServerAddress(host, port)
+
+
+@pytest.fixture
+def faker():
+    """Create faker object."""
+    return Factory.create()
