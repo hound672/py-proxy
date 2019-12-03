@@ -39,7 +39,6 @@ async def main():
     while True:
         await asyncio.sleep(1024)
 
-if __name__ == '__main__':
-    # asyncio.run(main())
+if __name__ == '__main__':  # pragma: no cover
     app = Application()
     app.run()

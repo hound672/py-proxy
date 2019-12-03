@@ -9,11 +9,11 @@ Main application class
 
 import asyncio
 
+from py_proxy.server_protocol import ServerProtocol
+
 
 class Application:
     """Main app class."""
-
-    _FOREVER_SLEEP_TIMEOUT: int = 3600
 
     def run(self) -> None:
         """Run application."""
@@ -21,12 +21,17 @@ class Application:
 
     async def _run(self) -> None:
         """Coroutine which run application."""
-        await self._init()
-        await self._run_forever()
+        server = await self._init()
+        await server.serve_forever()
 
-    async def _init(self) -> None:
+    async def _init(self) -> asyncio.AbstractServer:
         """Init app."""
+        return await self._create_server('', '')
 
-    async def _run_forever(self) -> None:
-        while True:
-            await asyncio.sleep(self._FOREVER_SLEEP_TIMEOUT)
+    @staticmethod
+    def _protocol_factory():
+        return ServerProtocol()
+
+    async def _create_server(self, host, port) -> asyncio.AbstractServer:
+        loop = asyncio.get_event_loop()
+        return await loop.create_server(self._protocol_factory, host=host, port=port)

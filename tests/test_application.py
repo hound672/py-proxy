@@ -7,7 +7,7 @@ Brief description.
 Some other description
 """
 
-from unittest.mock import patch, create_autospec
+from unittest.mock import AsyncMock, patch, create_autospec
 
 import pytest
 
@@ -37,18 +37,42 @@ async def test__run():  # noqa: WPS116  # ignore underscores name
     await app._run()  # type: ignore
 
     app._init.assert_awaited_with()
-    app._run_forever.assert_awaited_with()
+    app._init.return_value.serve_forever.assert_awaited_with()
 
 
-async def _mock_sleep_interrupted(*args):
-    raise InterruptedError
+@pytest.mark.skip  # skip until there is no settings
+@pytest.mark.asyncio
+async def test_init():
+    """Check if init method raises all methods for init."""
+    app = create_autospec(Application)
+    app._init = lambda: Application._init(app)
+
+    server = await app._init()  # type: ignore
+
+    app._create_server.assert_awaited_with('', '')
+    assert server == app._create_server.return_value
+
+
+@patch('py_proxy.application.ServerProtocol')
+def test_protocol_factory(mock_server_protocol, app):
+    """Check protocol factory method."""
+    protocol = app._protocol_factory()
+    mock_server_protocol.assert_called_with()
+    assert mock_server_protocol.return_value == protocol
 
 
 @pytest.mark.asyncio
-@patch('asyncio.sleep', side_effect=_mock_sleep_interrupted)
-async def test_run_forever(mock_sleep, app):
-    """Check if run_forever is awaited."""
-    with pytest.raises(InterruptedError):
-        await app._run_forever()
+@patch('asyncio.get_event_loop')
+async def test_create_server(mock_get_event_loop, app, get_server_address):
+    """Check if server starts with correct params."""
+    mock_loop = AsyncMock()
+    mock_get_event_loop.return_value = mock_loop
 
-    mock_sleep.assert_awaited_with(Application._FOREVER_SLEEP_TIMEOUT)
+    await app._create_server(get_server_address.host, get_server_address.port)
+
+    mock_get_event_loop.assert_called_with()
+    mock_loop.create_server.assert_awaited_with(
+        app._protocol_factory,
+        host=get_server_address.host,
+        port=get_server_address.port,
+    )
