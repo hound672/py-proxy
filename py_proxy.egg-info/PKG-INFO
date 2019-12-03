@@ -1,0 +1,11 @@
+Metadata-Version: 1.2
+Name: py-proxy
+Version: 0.0.1
+Summary: Simple proxy http server
+Home-page: UNKNOWN
+Author: hound672
+Author-email: hound672@gmail.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Requires-Python: >=3.8,<4.0

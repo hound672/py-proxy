@@ -1,5 +1,8 @@
 .DEFAULT_GOAL := all
 
+.PHONY: all
+all: tests lint mypy
+
 .PHONY: install
 install:
 	poetry install
@@ -14,10 +17,11 @@ tests:
 
 .PHONY: mypy
 mypy:
-	mypy py_proxy
+	mypy py_proxy tests
 
-.PHONY: all
-all: tests lint mypy
+.PHONY: run
+run:
+	python -m py_proxy
 
 .PHONY: clean
 clean:
