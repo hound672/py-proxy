@@ -8,7 +8,7 @@ from unittest.mock import patch
 import pytest
 
 from py_proxy.application import Application
-from py_proxy.server_protocol import ServerProtocol
+from py_proxy.http_protocol import HttpProtocol
 
 
 @pytest.fixture
@@ -21,7 +21,7 @@ async def get_server(get_server_address):
 
 
 @pytest.mark.asyncio
-@patch.object(ServerProtocol, 'connection_made', autospec=True)
+@patch.object(HttpProtocol, 'connection_made', autospec=True)
 async def test_connection_made(mock_connection_made, get_server):
     """Check if method connection_made was called."""
     _, host, port = get_server
@@ -35,7 +35,7 @@ async def test_connection_made(mock_connection_made, get_server):
 
 
 @pytest.mark.asyncio
-@patch.object(ServerProtocol, 'data_received', autospec=False)
+@patch.object(HttpProtocol, 'data_received', autospec=False)
 async def test_data_received(mock_data_received, get_server, faker):
     """Check if method data_received was called."""
     _, host, port = get_server

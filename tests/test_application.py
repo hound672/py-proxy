@@ -48,12 +48,12 @@ async def test_init():
     assert server == app._create_server.return_value
 
 
-@patch('py_proxy.application.ServerProtocol')
-def test_protocol_factory(mock_server_protocol, app):
+@patch('py_proxy.application.HttpProtocol')
+def test_protocol_factory(mock_http_protocol, app):
     """Check protocol factory method."""
     protocol = app._protocol_factory()
-    mock_server_protocol.assert_called_with()
-    assert mock_server_protocol.return_value == protocol
+    mock_http_protocol.assert_called_with()
+    assert mock_http_protocol.return_value == protocol
 
 
 @pytest.mark.asyncio
