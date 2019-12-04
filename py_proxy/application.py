@@ -8,8 +8,11 @@ Main application class
 """
 
 import asyncio
+import logging
 
 from py_proxy.http_proxy import HttpProxy
+
+logger = logging.getLogger(__name__)
 
 
 class Application:
@@ -21,6 +24,7 @@ class Application:
 
     async def _run(self) -> None:
         """Coroutine which run application."""
+        logging.basicConfig()
         server = await self._init()
         await server.serve_forever()
 

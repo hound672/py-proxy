@@ -22,4 +22,4 @@ class HttpProxy(Protocol):
         """Called when data is received."""
         logger.warning('Got data: {}'.format(data_received))
         # self._transport.write(data_received)
-        self._transport.write(b'hello')
+        # self._transport.write(b'hello')
