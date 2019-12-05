@@ -3,6 +3,7 @@
 """Fixtures."""
 
 import socket
+import pathlib
 from typing import NamedTuple
 
 import pytest
@@ -31,3 +32,9 @@ def get_server_address():
 def faker():
     """Create faker object."""
     return Factory.create()
+
+
+@pytest.fixture
+def files_dir():
+    """Return dir to files for tests."""
+    return pathlib.Path(__file__).parent / 'files'
